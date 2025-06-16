@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import navigate
 
 const AdminDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate(); // ✅ Hook for navigation
 
   const openInventoryModal = () => setIsOpen(true);
   const closeInventoryModal = () => setIsOpen(false);
@@ -66,7 +67,7 @@ const AdminDashboard = () => {
                     <button
                       onClick={() => {
                         closeInventoryModal();
-                        // navigate("/admin/categories"); // optional
+                        navigate("/admin/categories"); // ✅ Navigate here
                       }}
                       className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                     >
@@ -75,7 +76,7 @@ const AdminDashboard = () => {
                     <button
                       onClick={() => {
                         closeInventoryModal();
-                        // navigate("/admin/products"); // optional
+                        navigate("/admin/products"); // ✅ Hook up later
                       }}
                       className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                     >
