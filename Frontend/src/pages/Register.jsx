@@ -1,31 +1,45 @@
 // Register.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../Axios/api';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-  const [form, setForm] = useState({ 
-    name: '', 
-    email: '', 
-    password: '', 
-    role: 'user' 
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'user'
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
+      localStorage.removeItem('redirectAfterLogin');
+      navigate(redirectPath);
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       const res = await api.post('/auth/register', form);
-      localStorage.setItem('token', res.data.token);
-      
+      const { token, user } = res.data;
+
+      // Use the auth context login method
+      login(token, user);
+
       toast.success('Registration successful! Redirecting...', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -35,15 +49,21 @@ const Register = () => {
       });
 
       setTimeout(() => {
-        if (form.role === 'admin') {
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        localStorage.removeItem('redirectAfterLogin');
+
+        if (redirectPath) {
+          navigate(redirectPath);
+        } else if (user.role === 'admin') {
           navigate('/admin');
         } else {
           navigate('/');
         }
-      }, 3000);
+      }, 2000);
 
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed. Please try again.', {
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Registration failed. Please try again.';
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

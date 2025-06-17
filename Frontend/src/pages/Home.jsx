@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import HeroSlider from "../components/HeroSlider";
 import api from "../../Axios/api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import ProductCard from "../components/ProductCard"; // Import the separated ProductCard
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -39,6 +40,8 @@ const Home = () => {
       (product) =>
         product.subcategory?.toLowerCase() === subcategoryName?.toLowerCase()
     );
+
+
 
   return (
     <div className="relative">
@@ -131,6 +134,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };

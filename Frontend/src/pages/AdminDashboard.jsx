@@ -20,11 +20,17 @@ const AdminDashboard = () => {
           <h2 className="font-semibold text-lg mb-2">📦 Manage Inventory</h2>
           <p className="text-sm">View, add, edit, or remove products.</p>
         </div>
-        <div className="bg-white p-4 rounded shadow hover:shadow-lg">
+        <div
+          onClick={() => navigate("/admin/orders")}
+          className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"
+        >
           <h2 className="font-semibold text-lg mb-2">🛒 Orders</h2>
           <p className="text-sm">Track and manage customer orders.</p>
         </div>
-        <div className="bg-white p-4 rounded shadow hover:shadow-lg">
+        <div
+          onClick={() => navigate("/admin/users")}
+          className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"
+        >
           <h2 className="font-semibold text-lg mb-2">👥 Users</h2>
           <p className="text-sm">View all registered users.</p>
         </div>
@@ -81,6 +87,24 @@ const AdminDashboard = () => {
                       className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                     >
                       📦 Manage Products
+                    </button>
+                    <button
+                      onClick={() => {
+                        closeInventoryModal();
+                        navigate("/admin/orders");
+                      }}
+                      className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                    >
+                      📋 Manage Orders
+                    </button>
+                    <button
+                      onClick={() => {
+                        closeInventoryModal();
+                        navigate("/admin/users");
+                      }}
+                      className="w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                    >
+                      👥 Manage Users
                     </button>
                     <button
                       onClick={closeInventoryModal}

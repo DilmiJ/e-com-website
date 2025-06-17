@@ -1,7 +1,8 @@
 // Login.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../Axios/api';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,36 +10,55 @@ const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
+      localStorage.removeItem('redirectAfterLogin');
+      navigate(redirectPath);
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     try {
       const res = await api.post('/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      const role = res.data.user.role;
-      
+      const { token, user } = res.data;
+
+      // Use the auth context login method
+      login(token, user);
+
       toast.success('Login successful!', {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
       });
-      
-      // Wait for toast to show before navigating
+
+      // Handle redirect after login
       setTimeout(() => {
-        if (role === 'admin') {
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        localStorage.removeItem('redirectAfterLogin');
+
+        if (redirectPath) {
+          navigate(redirectPath);
+        } else if (user.role === 'admin') {
           navigate('/admin');
         } else {
           navigate('/');
         }
-      }, 2000);
-      
+      }, 1500);
+
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed. Please try again.', {
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Login failed. Please try again.';
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
