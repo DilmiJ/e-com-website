@@ -13,11 +13,14 @@ import UserManagement from "./pages/Adminpages/UserManagement";
 import UserDashboard from "./pages/UserDashboard";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import CategoryPage from "./pages/CategoryPage";
+import TestPage from "./pages/TestPage";
 
 // Components
 import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider } from "./components/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route path="/category/:categoryName/:subcategoryName" element={<CategoryPage />} />
 
             {/* Protected Routes */}
             <Route
