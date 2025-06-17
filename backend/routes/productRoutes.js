@@ -1,9 +1,16 @@
+// routes/productRoutes.js
 const express = require("express");
 const router = express.Router();
-const upload = require("../middleware/upload");
-const { createProduct, getAllProducts } = require("../controllers/productController");
+const {
+  createProduct,
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+} = require("../controllers/productController");
 
-router.post("/", upload.single("image"), createProduct);
+router.post("/", createProduct);
 router.get("/", getAllProducts);
+router.put("/:id", updateProduct);
+router.delete("/:id", deleteProduct);
 
 module.exports = router;

@@ -6,12 +6,13 @@ import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
 import AdminDashboard from "./pages/AdminDashboard";
 import CategoryAdd from "./pages/Adminpages/CategoryAdd";
-import ErrorBoundary from "./components/ErrorBoundary"; // Optional but recommended
+import ErrorBoundary from "./components/ErrorBoundary"; 
+import ProductAdd from "../src/pages/Adminpages/AddProduct";
+import Cart from "../src/pages/cart"
 
 function App() {
   return (
     <Router>
-   
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -19,6 +20,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/categories" element={<CategoryAdd />} />
+          <Route path="/admin/products" element={<ProductAdd />} />
+<Route path="/cart" element={<Cart />} />
         </Routes>
       </ErrorBoundary>
     </Router>

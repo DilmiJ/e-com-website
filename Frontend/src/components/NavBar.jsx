@@ -6,7 +6,10 @@ const NavBar = () => {
 
   return (
     <nav className="bg-green-600 text-white px-6 py-3 flex justify-between items-center">
-      <div className="font-extrabold text-2xl cursor-pointer" onClick={() => navigate("/")}>
+      <div
+        className="font-extrabold text-2xl cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         Barakat
       </div>
 
@@ -19,6 +22,7 @@ const NavBar = () => {
       </div>
 
       <div className="flex items-center gap-6">
+        {/* Sign In */}
         <button
           className="flex items-center gap-1 text-white hover:underline"
           onClick={() => navigate("/login")}
@@ -27,10 +31,16 @@ const NavBar = () => {
           <span>Sign In</span>
         </button>
 
-        <button className="relative flex items-center gap-1">
+        {/* Cart */}
+        <button
+          className="relative flex items-center gap-1"
+          onClick={() => navigate("/cart")}
+        >
           <FaShoppingCart className="text-white" />
           <span>Cart</span>
-          <span className="absolute -top-2 -right-3 bg-red-500 text-xs rounded-full px-1">0</span>
+          <span className="absolute -top-2 -right-3 bg-red-500 text-xs rounded-full px-1">
+            0
+          </span>
         </button>
       </div>
     </nav>

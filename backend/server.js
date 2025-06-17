@@ -1,9 +1,9 @@
-// backend/server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+// Route Imports
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -12,27 +12,34 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use("/uploads", express.static("uploads")); // serve static images
+
+// ✅ Support large JSON and URL-encoded bodies (for base64 images)
+app.use(express.json({ limit: "1000mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1000mb" }));
+
+// Optional: serve uploaded images if you ever go back to file upload
+app.use("/uploads", express.static("uploads"));
 
 // API Routes
 app.use("/api/auth", authRoutes);             // Login/Register
-app.use("/api/products", productRoutes);      // Products CRUD
-app.use("/api/categories", categoryRoutes);   // Categories CRUD
+app.use("/api/products", productRoutes);      // Product routes
+app.use("/api/categories", categoryRoutes);   // Category routes
 
-// Root test route (optional)
+// Health check route
 app.get("/", (req, res) => {
-  res.send("Welcome to the Barakat API backend.");
+  res.send("✅ Barakat API is running.");
 });
 
-// MongoDB connection
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => {
   console.log("✅ MongoDB connected");
-  app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+  app.listen(process.env.PORT || 5000, () =>
+    console.log(`🚀 Server running on port ${process.env.PORT || 5000}`)
+  );
 })
 .catch((err) => {
   console.error("❌ MongoDB connection failed:", err.message);
